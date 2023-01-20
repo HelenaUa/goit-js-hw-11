@@ -12,9 +12,20 @@ body {
   line-height: 1.5;
 }
 
-#search-box {
+#search-form {
   font: inherit;
   padding: 8px;
-  max-width: 320px;
+  max-width: 1200px;
   margin-bottom: 16px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: blue;
+  display: flex;
+  justify-content: center;
+}
+
+.load-more {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
 }
