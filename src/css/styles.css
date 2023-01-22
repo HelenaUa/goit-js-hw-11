@@ -29,3 +29,37 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+.gallery {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+}
+
+.gallery__item {
+  width: 300px;
+  text-decoration: none;
+}
+
+.photo-card {
+  height: 100%;
+  box-shadow: 0px 2px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.info {
+  display: flex;
+}
+
+.info-item {
+  display: flex;
+  color: black;
+  text-align: center;
+  list-style: none;
+}
+
+.load-more {
+  visibility: hidden;
+}
