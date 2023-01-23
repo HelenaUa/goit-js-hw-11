@@ -13,15 +13,16 @@ const btnLoadMore = document.querySelector(".load-more");
 const KEY = "32997902-3b59b8944b64f8408d8a5fafd";
 const BASE_URL = "https://pixabay.com/api/";
 
- let page = 1;
+let page = 1;
+let nameSearch = "";
+btnLoadMore.style.display = "none";
+ 
 
 form.addEventListener("submit", onSubmitForm);
 
-function onSubmitForm(event) {
-  btnLoadMore.hidden = false;
+async function onSubmitForm(event) {
   event.preventDefault();
-  
-  const nameSearch = event.target.elements.searchQuery.value.trim();
+  nameSearch = event.target.elements.searchQuery.value.trim();
   
     divGallery.innerHTML = "";
 
@@ -29,25 +30,36 @@ function onSubmitForm(event) {
         return;
     };
   
-  fetchTerm(nameSearch, page).then(data => {
-    const arrayPictures = createMarkupImg(data.hits);
-    divGallery.insertAdjacentHTML("beforeend", arrayPictures);
-    btnLoadMore.hidden = true;
-}).catch(error => console.log(error));
+  const response = await fetchTerm(nameSearch, page);
+  const arrayPictures = createMarkupImg(response.hits);
 
+  btnLoadMore.style.display = "block";
+  divGallery.insertAdjacentHTML("beforeend", arrayPictures);
+
+ if (response.hits.length === 0) {
+      Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+      btnLoadMore.style.display = "none";
+      return;
+  };
+
+  if (response.totalHits > 0) {
+    Notiflix.Notify.success(`Hooray! We found ${response.totalHits} images.`);
+    return;
+  };
+
+//   fetchTerm(nameSearch, page).then(data => {
+//     const arrayPictures = createMarkupImg(data.hits);
+//     divGallery.insertAdjacentHTML("beforeend", arrayPictures);
+//      btnLoadMore.style.display = "block";
+// }).catch(error => console.log(error));
 };
 
 
 async function fetchTerm(name, page) {
 const response = await axios.get(`${BASE_URL}?key=${KEY}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
    console.log(response);
-    if (response.data.hits.length === 0) {
-      Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-    };
-  page += 1;
   return response.data;
 };
-
 
 
 function createMarkupImg(array) {
@@ -81,17 +93,26 @@ function createMarkupImg(array) {
 
 btnLoadMore.addEventListener("click", onClick);
 
-function onClick(event) {
-  fetchTerm(page).then(data => {
-    page += 1;
-    const arrayPictures = createMarkupImg(data.hits);
-    divGallery.insertAdjacentHTML('beforeend', arrayPictures);
-  if (data.hits > data.totalHits) {
-    btnLoadMore.hidden = true;
+async function onClick() {
+  page += 1;
+  const response = await fetchTerm(nameSearch, page);
+  const arrayPictures = createMarkupImg(response.hits);
+  divGallery.insertAdjacentHTML("beforeend", arrayPictures);
+
+  if (response.hits.length === 0) {
+    btnLoadMore.style.display = "none";
     Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
     return;
-    }
-  }).catch(error => console.log(error));
+  }
+  // fetchTerm(page).then(data => {
+  //   const arrayPictures = createMarkupImg(data.hits);
+  //   divGallery.insertAdjacentHTML('beforeend', arrayPictures);
+  // if (data.hits > data.totalHits) {
+  //   btnLoadMore.hidden = true;
+  //   Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+  //   return;
+  //   }
+  // }).catch(error => console.log(error));
 };
 
 

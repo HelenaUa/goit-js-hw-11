@@ -61,5 +61,5 @@ body {
 }
 
 .load-more {
-  visibility: hidden;
+  display: block;
 }
