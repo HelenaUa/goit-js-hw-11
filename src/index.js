@@ -22,6 +22,7 @@ form.addEventListener("submit", onSubmitForm);
 
 async function onSubmitForm(event) {
   event.preventDefault();
+  page = 1;
   nameSearch = event.target.elements.searchQuery.value.trim();
   
     divGallery.innerHTML = "";
@@ -30,7 +31,8 @@ async function onSubmitForm(event) {
         return;
     };
   
-  const response = await fetchTerm(nameSearch, page);
+  try {
+const response = await fetchTerm(nameSearch, page);
   const arrayPictures = createMarkupImg(response.hits);
 
   btnLoadMore.style.display = "block";
@@ -46,6 +48,10 @@ async function onSubmitForm(event) {
     Notiflix.Notify.success(`Hooray! We found ${response.totalHits} images.`);
     return;
   };
+  } catch (error) {
+        console.log(error);
+  };
+  
 
 //   fetchTerm(nameSearch, page).then(data => {
 //     const arrayPictures = createMarkupImg(data.hits);
@@ -95,7 +101,8 @@ btnLoadMore.addEventListener("click", onClick);
 
 async function onClick() {
   page += 1;
-  const response = await fetchTerm(nameSearch, page);
+  try {
+const response = await fetchTerm(nameSearch, page);
   const arrayPictures = createMarkupImg(response.hits);
   divGallery.insertAdjacentHTML("beforeend", arrayPictures);
 
@@ -103,12 +110,16 @@ async function onClick() {
     btnLoadMore.style.display = "none";
     Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
     return;
-  }
+  } 
+  } catch (error) {
+        console.log(error);
+  };
+  
   // fetchTerm(page).then(data => {
   //   const arrayPictures = createMarkupImg(data.hits);
   //   divGallery.insertAdjacentHTML('beforeend', arrayPictures);
   // if (data.hits > data.totalHits) {
-  //   btnLoadMore.hidden = true;
+  //   btnLoadMore.style.display = "none";
   //   Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
   //   return;
   //   }
