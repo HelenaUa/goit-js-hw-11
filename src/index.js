@@ -52,7 +52,6 @@ const response = await fetchTerm(nameSearch, page);
         console.log(error);
   };
   
-
 //   fetchTerm(nameSearch, page).then(data => {
 //     const arrayPictures = createMarkupImg(data.hits);
 //     divGallery.insertAdjacentHTML("beforeend", arrayPictures);
@@ -78,7 +77,7 @@ function createMarkupImg(array) {
             comments,
             downloads,
   }) => `<a class="gallery__item" href="${largeImageURL}"><div class="photo-card">
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300px"/>
+  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
   <div class="info">
     <p class="info-item">
       <b>Likes ${likes}</b>
