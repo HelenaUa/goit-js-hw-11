@@ -9,6 +9,7 @@ import axios from 'axios';
 const form = document.querySelector("#search-form");
 const divGallery = document.querySelector(".gallery");
 const btnLoadMore = document.querySelector(".load-more");
+const a = document.querySelectorAll("a");
 
 const KEY = "32997902-3b59b8944b64f8408d8a5fafd";
 const BASE_URL = "https://pixabay.com/api/";
@@ -92,8 +93,14 @@ function createMarkupImg(array) {
       <b>Downloads ${downloads}</b>
     </p>
   </div>
-</div>` ).join("");
+</div></a>` ).join("");
 };
+
+
+a.forEach(el => {
+  el.addEventListener("click", onClickImg);
+  function onClickImg(event) { event.preventDefault() }
+});
 
 
 btnLoadMore.addEventListener("click", onClick);
