@@ -6,10 +6,15 @@ import Notiflix from 'notiflix';
 import axios from 'axios';
 // console.log(axios);
 
+import SimpleLightbox from "simplelightbox";
+// console.log(SimpleLightbox);
+
+// Дополнительный импорт стилей
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 const form = document.querySelector("#search-form");
 const divGallery = document.querySelector(".gallery");
 const btnLoadMore = document.querySelector(".load-more");
-const a = document.querySelectorAll("a");
 
 const KEY = "32997902-3b59b8944b64f8408d8a5fafd";
 const BASE_URL = "https://pixabay.com/api/";
@@ -17,6 +22,12 @@ const BASE_URL = "https://pixabay.com/api/";
 let page = 1;
 let nameSearch = "";
 btnLoadMore.style.display = "none";
+
+let lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionsPositions: 'bottom',
+  captionDelay: 250,
+});
  
 
 form.addEventListener("submit", onSubmitForm);
@@ -38,7 +49,8 @@ const response = await fetchTerm(nameSearch, page);
 
   btnLoadMore.style.display = "block";
   divGallery.insertAdjacentHTML("beforeend", arrayPictures);
-
+lightbox.refresh();
+    
  if (response.hits.length === 0) {
       Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
       btnLoadMore.style.display = "none";
@@ -97,12 +109,6 @@ function createMarkupImg(array) {
 };
 
 
-a.forEach(el => {
-  el.addEventListener("click", onClickImg);
-  function onClickImg(event) { event.preventDefault() }
-});
-
-
 btnLoadMore.addEventListener("click", onClick);
 
 async function onClick() {
@@ -111,7 +117,8 @@ async function onClick() {
 const response = await fetchTerm(nameSearch, page);
   const arrayPictures = createMarkupImg(response.hits);
   divGallery.insertAdjacentHTML("beforeend", arrayPictures);
-
+lightbox.refresh();
+    
   if (response.hits.length === 0) {
     btnLoadMore.style.display = "none";
     Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
